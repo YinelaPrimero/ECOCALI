@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "612236198383",
+    "firebase_url": "https://ecocali-uao-default-rtdb.firebaseio.com",
+    "project_id": "ecocali-uao",
+    "storage_bucket": "ecocali-uao.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612236198383:android:924828c687424dcb0f761a",
+        "android_client_info": {
+          "package_name": "com.dm2.ecocali"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH0j9IwbjWt-2IVQwDk7-Y1ZvsTbAyNuw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
