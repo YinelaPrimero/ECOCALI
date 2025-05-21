@@ -10,8 +10,11 @@ public class Event
     public List<string> Activities;
     public string ImageUrl;
     public float Price;
-    public string Date;  // en formato "yyyy-MM-dd"
+    public string Date;   // Formato "yyyy-MM-dd"
     public string Hour;
     public string Place;
     public string Organizer;
+
+    // Para debug
+    public override string ToString() => $"{Title} ({Date} {Hour})";
 }

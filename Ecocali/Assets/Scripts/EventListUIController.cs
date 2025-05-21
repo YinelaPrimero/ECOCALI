@@ -1,100 +1,64 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EventListUIController : MonoBehaviour
 {
-    public FirebaseEventService eventService;     // Referencia a nuestro servicio
-    public Transform eventsPanel;                 // Padre donde se instanciarán los prefabs
-    public GameObject eventCardPrefab;           // Prefab de la tarjeta
-
-    // Referencia al panel de detalle de evento
+    [Header("UI References")]
+    public Transform eventsPanel;
+    public GameObject eventCardPrefab;
     public GameObject eventDetailPanel;
-    // Referencias a los elementos del panel de detalle (Text, Image, etc.)
-    public Text detailTitle;
-    public Text detailDescription;
-    public Text detailDateHour;
-    public Text detailActivities;
-    // etc.
+    public Text detailTitle, detailDescription, detailDateHour;
 
-    void OnEnable()
+    [Header("Services")]
+    public FirebaseRestService restService;
+
+    private void Start()
     {
-        FirebaseInitializer.OnFirebaseInitialized += LoadAndDisplayFirstSixEvents;
+        StartCoroutine(restService.GetFirstNEvents(6, OnEventsLoaded));
     }
 
-    void OnDisable()
+    private void OnEventsLoaded(List<Event> events)
     {
-        FirebaseInitializer.OnFirebaseInitialized -= LoadAndDisplayFirstSixEvents;
-    }
-
-    private async void LoadAndDisplayFirstSixEvents()
-    {
-        List<Event> firstSixEvents = await eventService.GetFirstSixEventsAsync();
-
-        foreach (Event ev in firstSixEvents)
+        foreach (var ev in events)
         {
-            // Crear la tarjeta
-            GameObject newCard = Instantiate(eventCardPrefab, eventsPanel);
+            var card = Instantiate(eventCardPrefab, eventsPanel);
 
-            // Buscar referencias a los elementos UI de la tarjeta
-            Text titleText = newCard.transform.Find("TitleText").GetComponent<Text>();
-            Text dateText = newCard.transform.Find("Info/Date/DateText").GetComponent<Text>();
-            Text hourText = newCard.transform.Find("Info/Hour/HourText").GetComponent<Text>();
-            Text placeText = newCard.transform.Find("Info/Place/PlaceText").GetComponent<Text>();
-            Text priceText = newCard.transform.Find("Price/PriceText").GetComponent<Text>();
-            Text organizersText = newCard.transform.Find("Info/Organizers/OrganizersText").GetComponent<Text>();
-            Button button = newCard.transform.Find("EventButton").GetComponent<Button>();
+            card.transform.Find("TitleText")
+                .GetComponent<Text>().text = ev.Title;
 
-            // Asignar valores
-            titleText.text = ev.Title;
-            dateText.text = ev.Date;
-            hourText.text = ev.Hour;
-            placeText.text = ev.Place;
-            organizersText.text = ev.Organizer;
+            card.transform.Find("Info/Date/DateText")
+                .GetComponent<Text>().text = ev.Date;
 
-            if (ev.Price != 0)
-            {
-                priceText.text = ev.Price.ToString();
-            }
-            
-            // Asignar el evento onClick
-            button.onClick.AddListener(() =>
-            {
-                ShowEventDetail(ev);
-            });
+            card.transform.Find("Info/Hour/HourText")
+                .GetComponent<Text>().text = ev.Hour;
+
+            card.transform.Find("Info/Place/PlaceText")
+                .GetComponent<Text>().text = ev.Place;
+
+            card.transform.Find("Info/Organizers/OrganizersText")
+                .GetComponent<Text>().text = ev.Organizer;
+
+            card.transform.Find("Price/PriceText")
+                .GetComponent<Text>().text = ev.Price != 0
+                    ? ev.Price.ToString("F2")
+                    : "Gratis";
+
+            var button = card.transform.Find("EventButton").GetComponent<Button>();
+            button.onClick.AddListener(() => ShowEventDetail(ev));
         }
     }
 
     private void ShowEventDetail(Event ev)
     {
-        // Mostrar el panel de detalle
-        eventDetailPanel.SetActive(true);
-
-        // Rellenar los campos de texto
         detailTitle.text = ev.Title;
         detailDescription.text = ev.Description;
         detailDateHour.text = $"Fecha: {ev.Date}\nHora: {ev.Hour}";
-        if (ev.Activities != null && ev.Activities.Count > 0)
-        {
-            detailActivities.text = $"- {string.Join("\n- ", ev.Activities)}";
-        }
-        else
-        {
-            detailActivities.text = "No hay actividades disponibles";
-        }
-
-
-        // etc.
-
-        // Si tu panel de inicio se debe ocultar, haz algo como:
-        // eventsPanel.gameObject.SetActive(false);
+        eventDetailPanel.SetActive(true);
     }
 
-    // Método para cerrar el panel de detalle (por ejemplo, en un botón "Volver")
     public void CloseEventDetail()
     {
         eventDetailPanel.SetActive(false);
-        // eventsPanel.gameObject.SetActive(true);
     }
 }
