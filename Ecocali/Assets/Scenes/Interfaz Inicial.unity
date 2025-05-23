@@ -897,7 +897,9 @@ MonoBehaviour:
   - {fileID: 32900000, guid: 1fc767b9547584a49bc14612f06278bb, type: 3}
   - {fileID: 32900000, guid: 847c36a9741e79343aee65ae69469b44, type: 3}
   - {fileID: 32900000, guid: a58f25db14d71d741869f336bbe5bb87, type: 3}
+  - {fileID: 32900000, guid: 8e6bff783b0a98348a876d27bf82237f, type: 3}
   - {fileID: 32900000, guid: acc0b2e7098c74840a2fbdc09eb96bac, type: 3}
+  - {fileID: 32900000, guid: 39180e129b6cf654a8fd23aff91d28aa, type: 3}
   - {fileID: 32900000, guid: e5111eb003b1b0542b8d5cd1a513adfc, type: 3}
   pantalla: {fileID: 1686010133}
 --- !u!4 &2090484437
